@@ -1,6 +1,11 @@
 {
   "name": "asmvsc",
   "displayName": "asmvsc",
+  "publisher": "LS554",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LS554/asmvsc"},
+  "title": "asmvsc",
   "description": "Autogenerate build tasks for nasm",
   "license": "MIT",
   "version": "0.0.1",
@@ -10,7 +15,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+  "onLanguage:asm",
+  "workspaceContains:**/*.asm"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
