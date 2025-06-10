@@ -23,8 +23,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "asmvsc.helloWorld",
-        "title": "Hello World"
+        "command": "asmvsc.runBuildTask",
+        "title": "ASM: Run Build and Link Task"
       }
     ]
   },
