@@ -7,7 +7,7 @@ import * as path from 'path';
 
 export async function activate(context: vscode.ExtensionContext) {
   const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders) { 
+  if (!workspaceFolders) {
     return;
   }
 
@@ -62,22 +62,48 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 
   // Register command to run the "build and link" task
-  const runBuildTaskCmd = vscode.commands.registerCommand('asmvsc.runBuildTask', async () => {
+  const runBuildAndLinkCmd = vscode.commands.registerCommand('asmvsc.runBuildAndLink', async () => {
     const tasks = await vscode.tasks.fetchTasks();
-    const buildTask = tasks.find(task => task.name === 'build and link');
-    if (buildTask) {
-      vscode.tasks.executeTask(buildTask);
+    const task = tasks.find(t => t.name === 'build and link');
+    if (task) {
+      vscode.tasks.executeTask(task);
     } else {
-      vscode.window.showErrorMessage('Build task not found');
+      vscode.window.showErrorMessage('Build and link task not found.');
     }
   });
-  context.subscriptions.push(runBuildTaskCmd);
+  context.subscriptions.push(runBuildAndLinkCmd);
 
-  // Create and show a status bar button to run the build task
+  // Register command to run the "build" task
+  const runBuildOnlyCmd = vscode.commands.registerCommand('asmvsc.runBuildOnly', async () => {
+    const tasks = await vscode.tasks.fetchTasks();
+    const task = tasks.find(t => t.name === 'build');
+    if (task) {
+      vscode.tasks.executeTask(task);
+    } else {
+      vscode.window.showErrorMessage('Build task not found.');
+    }
+  });
+  context.subscriptions.push(runBuildOnlyCmd);
+
+  // Register command to choose between build options
+  const chooseBuildOptionCmd = vscode.commands.registerCommand('asmvsc.chooseBuildOption', async () => {
+    const selected = await vscode.window.showQuickPick(['build', 'build and link'], {
+      placeHolder: 'Select a build option'
+    });
+
+    if (selected === 'build') {
+      vscode.commands.executeCommand('asmvsc.runBuildOnly');
+    } else if (selected === 'build and link') {
+      vscode.commands.executeCommand('asmvsc.runBuildAndLink');
+    }
+  });
+  context.subscriptions.push(chooseBuildOptionCmd);
+
+  // Create and show a status bar button to choose the build option
   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
   statusBarItem.text = '$(gear) Build ASM';
-  statusBarItem.tooltip = 'Run build and link task';
-  statusBarItem.command = 'asmvsc.runBuildTask';
+  statusBarItem.tooltip = 'Choose a build option';
+  statusBarItem.command = 'asmvsc.chooseBuildOption';
   statusBarItem.show();
   context.subscriptions.push(statusBarItem);
 }

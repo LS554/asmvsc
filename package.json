@@ -4,11 +4,12 @@
   "publisher": "LS554",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LS554/asmvsc"},
+    "url": "https://github.com/LS554/asmvsc"
+  },
   "title": "asmvsc",
   "description": "Autogenerate build tasks for nasm",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.100.0"
   },
@@ -17,14 +18,30 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-  "onLanguage:asm",
-  "workspaceContains:**/*.asm"],
+    "onLanguage:asm",
+    "workspaceContains:**/*.asm",
+    "onCommand:asmvsc.runBuildOnly",
+    "onCommand:asmvsc.runBuildAndLink",
+    "onCommand:asmvsc.chooseBuildOption"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "asmvsc.runBuildTask",
         "title": "ASM: Run Build and Link Task"
+      },
+      {
+        "command": "asmvsc.runBuildOnly",
+        "title": "ASM: Build Only"
+      },
+      {
+        "command": "asmvsc.runBuildAndLink",
+        "title": "ASM: Build and Link"
+      },
+      {
+        "command": "asmvsc.chooseBuildOption",
+        "title": "ASM: Choose Build Option"
       }
     ]
   },
